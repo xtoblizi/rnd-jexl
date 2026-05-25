@@ -111,8 +111,8 @@ public class DiscountComputationEngine {
      * @return
      */
     public Object evaluateAndGetDiscount (TransactionRecord transactionRecord){
-        if(isContextLoaded){
-            throw new RuntimeException("Valid Jexl expression or context not set");
+        if(!isContextLoaded){
+            throw new RuntimeException("Valid JEXL expression or context not set");
         }
         JexlEngine jexlEngine = buildJexlEngine();
         var jexlExpression = jexlEngine.createExpression(this.discountComputationExpression);

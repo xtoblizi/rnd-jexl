@@ -30,7 +30,19 @@ public class Bootstrap {
                 true);
 
         var discountValue = discountComputationEngine.evaluateAndGetDiscount(transactionRecord);
-        log.info("Discount value for this transaction: {} is {}", transactionRecord, discountValue);
+        log.info("---------------------------------------CONSOLE RESULT DETAILS----------------------------------------");
+
+        log.info("Transaction details: {}", transactionRecord);
+        log.info("Original Transaction Amount: {}", transactionRecord.getAmount());
+        log.info("Discounted Transaction Amount: {}", discountValue);
+
+        log.info("--------------------------- Expression used to compute -------------------- \n");
+
+        log.info("Expression details: {}", ExpressionDefaults.DEFAULT_DISCOUNT_EXPRESSION);
+
+        log.info("---------------------------------------CONSOLE RESULT CLOSES----------------------------------------");
+
+
     }
 
 
