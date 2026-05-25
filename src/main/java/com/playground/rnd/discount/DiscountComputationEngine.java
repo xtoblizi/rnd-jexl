@@ -1,6 +1,7 @@
 package com.playground.rnd.discount;
 import com.playground.rnd.jexlValidators.JexlValidator;
 import com.playground.rnd.models.TransactionRecord;
+import com.playground.rnd.utils.ExpressionDefaults;
 import com.playground.rnd.utils.Today;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class DiscountComputationEngine {
 
     public String discountComputationExpression;
     public JexlContext jexlParamsContext;
-    private static final String DEFAULT_DISCOUNT_EXPRESSION = "transactionRecord.amount >= discountAmount ? transactionRecord.amount - (lowerDiscount * transactionRecord.amount): transactionRecord.amount - (higherDiscount * transactionRecord.amount) ";
+    private static final String DEFAULT_DISCOUNT_EXPRESSION = ExpressionDefaults.DEFAULT_DISCOUNT_EXPRESSION;
 
     private static boolean isContextLoaded = false;
 
@@ -58,7 +59,7 @@ public class DiscountComputationEngine {
      * perform discount evaluation.
      * @return
      */
-    public void setExpression(@Nullable String customExpression, boolean useCustomExpression) {
+    private void setExpression(@Nullable String customExpression, boolean useCustomExpression) {
         if(!Strings.isBlank(customExpression) && useCustomExpression){
             this.discountComputationExpression = customExpression;
         }else {

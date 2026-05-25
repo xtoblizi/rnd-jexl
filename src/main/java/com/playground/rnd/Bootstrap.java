@@ -1,6 +1,7 @@
 package com.playground.rnd;
 
 import com.playground.rnd.discount.DiscountComputationEngine;
+import com.playground.rnd.utils.ExpressionDefaults;
 import com.playground.rnd.utils.Today;
 import com.playground.rnd.models.TransactionRecord;
 import jakarta.annotation.PostConstruct;
@@ -24,9 +25,14 @@ public class Bootstrap {
         log.info("Starting RND Bootstrap operation");
 
         TransactionRecord transactionRecord = buildTransaction();
+        discountComputationEngine.buildContext(transactionRecord,
+                ExpressionDefaults.DEFAULT_DISCOUNT_EXPRESSION,
+                true);
+
         var discountValue = discountComputationEngine.evaluateAndGetDiscount(transactionRecord);
         log.info("Discount value for this transaction: {} is {}", transactionRecord, discountValue);
     }
+
 
     private TransactionRecord buildTransaction(){
        return TransactionRecord.builder()

@@ -5,7 +5,9 @@ This project explore usage of jexl for easy application logic configurability. I
 It is a spring boot java application.
 Uses Java 25 and Spring boot version 4.0.6, H2 run time db
 
-# To test the application. Run the application from it's main method.
+# To test the application.
+Run the application from it's main method.
+A boostrap operation kicks in. A PostConstruct method called : "ExecuteBootstrap" initiates the discount evaluation and computation process.
 
 # Extendability
 You can add a controller layer as to provide a custom expression via endpoint
