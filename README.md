@@ -3,18 +3,21 @@ This project explore usage of jexl for easy application logic configurability. I
 
 # Tools
 It is a spring boot java application.
-Uses Java 25 and Spring boot version 4.0.6, H2 run time db
+Uses Java 25 and Spring boot version 4.0.6, H2 (run time db)
 
 # To test the application.
 Run the application from it's main method.
-A boostrap operation kicks in. A PostConstruct method called : "ExecuteBootstrap" initiates the discount evaluation and computation process.
+A boostrap operation kicks in. A PostConstruct methods to execute the implementation : 
+ ExecuteTransactionDiscountComputation, 
+ ExecuteCustomerTransactionFraudEvaluation,
+ ExecuteCustomerTransactionFraudEvaluationV2
 
 # Extendability
-You can add a controller layer as to provide a custom expression via endpoint
+You can add a controller layer as to provide a custom expression via endpoint and any other desired code for test and practice.
 
 # Validation
 There is a JexlValidator class in the jexlValidator package. You can use that to first validate expression if you wish to
-provide and accept custom expression from a presentation layer. This is to prevent expression exception at the point of evaluation.
+provide and accept custom expression from a presentation layer. This is to prevent expression exception at the point of evaluation (runtime).
 
 # Author
 Ogbosuka Christopher -
@@ -23,7 +26,7 @@ Software Architect
 # License
 Feel free to modify and tweak code base as deem fit for your use.
 
-# Overview
+# Closing Overview
 This code showcases how to use JEXL for easy business process computation without little to no overhead on the system availability. 
 
 The idea speaks to flexibility for a system to easily create and adjust certain business aspect without the need for code change and re-deployment.
