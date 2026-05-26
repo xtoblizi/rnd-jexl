@@ -23,4 +23,9 @@ public class RndConfigs {
 
         return holidays;
     }
+
+    @Bean
+    public FlagTransactionConfig flagTransactionConfig(){
+        return FlagTransactionConfig.getDefault();
+    }
 }

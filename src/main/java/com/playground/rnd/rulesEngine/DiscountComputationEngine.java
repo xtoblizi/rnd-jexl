@@ -1,4 +1,4 @@
-package com.playground.rnd.discount;
+package com.playground.rnd.rulesEngine;
 import com.playground.rnd.jexlValidators.JexlValidator;
 import com.playground.rnd.models.TransactionRecord;
 import com.playground.rnd.utils.ExpressionDefaults;
@@ -39,7 +39,7 @@ public class DiscountComputationEngine {
 
     /**
      * build context for the expression
-     * @param transactionRecord
+     * @param transactionRecord, customExpression, useCustomExpression
      */
     public void buildContext(TransactionRecord transactionRecord,
                              @Nullable String customExpression,
@@ -49,10 +49,14 @@ public class DiscountComputationEngine {
         this.jexlParamsContext = getContext(transactionRecord);
         var missing = JexlValidator.findMissingVariables(this.discountComputationExpression, this.jexlParamsContext);
         if(!missing.isEmpty()){
-            throw new RuntimeException("Invalid expression or map of parameters");
+            throw new RuntimeException(String.format("Invalid expression or map of parameters. Missing variables. %s", missing));
         }
         isContextLoaded = true;
     }
+
+
+
+
 
     /**
      * Create and return a sample expression that utilizes the fields of the transaction record object to

@@ -1,8 +1,11 @@
 package com.playground.rnd;
 
-import com.playground.rnd.discount.DiscountComputationEngine;
+import com.playground.rnd.rulesEngine.DiscountComputationEngine;
+import com.playground.rnd.rulesEngine.FraudEvaluationEngine;
+import com.playground.rnd.models.Customer;
+import com.playground.rnd.models.KycLevel;
+import com.playground.rnd.models.MembershipType;
 import com.playground.rnd.utils.ExpressionDefaults;
-import com.playground.rnd.utils.Today;
 import com.playground.rnd.models.TransactionRecord;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -18,35 +21,62 @@ import java.util.UUID;
 public class Bootstrap {
 
     private final DiscountComputationEngine discountComputationEngine;
-    private final Today today;
+    private final FraudEvaluationEngine fraudEvaluationEngine;
 
     @PostConstruct
-    public void ExecuteBootstrap(){
-        log.info("Starting RND Bootstrap operation");
+    public void ExecuteTransactionDiscountComputation(){
+        log.info("Starting RND Transaction Discount Computation Operation");
 
-        TransactionRecord transactionRecord = buildTransaction();
+        TransactionRecord transactionRecord = buildV1Transaction();
         discountComputationEngine.buildContext(transactionRecord,
                 ExpressionDefaults.DEFAULT_DISCOUNT_EXPRESSION,
                 true);
 
         var discountValue = discountComputationEngine.evaluateAndGetDiscount(transactionRecord);
-        log.info("---------------------------------------CONSOLE RESULT DETAILS----------------------------------------");
+        log.info("--------------------------------------Starting RND for Discount Computation v1-------------------------------------------");
 
         log.info("Transaction details: {}", transactionRecord);
         log.info("Original Transaction Amount: {}", transactionRecord.getAmount());
         log.info("Discounted Transaction Amount: {}", discountValue);
 
-        log.info("--------------------------- Expression used to compute -------------------- \n");
+        log.info("------------------------------------- Closed Discount Computation --------------------------------------- \n \n");
+    }
 
-        log.info("Expression details: {}", ExpressionDefaults.DEFAULT_DISCOUNT_EXPRESSION);
+    @PostConstruct
+    public void ExecuteCustomerTransactionFraudEvaluation(){
+        log.info("------------------------------ Starting RND for Transaction Fraud Evaluation v1-------------------------");
+        var customer = buildV1Customer();
+        var transaction = buildV1Transaction();
 
-        log.info("---------------------------------------CONSOLE RESULT CLOSES----------------------------------------");
+        fraudEvaluationEngine.configureContext(transaction, customer);
+        fraudEvaluationEngine.build(null, false);
+        var isTransactionFraudulent = fraudEvaluationEngine.isTransactionSuspicious(transaction, customer);
 
+        log.info("Transaction considered suspicious or fraudulent : {}", isTransactionFraudulent);
+        log.info("Expression Used : {}", ExpressionDefaults.FLAG_TRANSACTION_DEFAULT_v1);
 
+        log.info("--------------------------------- Completed the Fraud Evaluation Review ------------------------------------- \n \n");
     }
 
 
-    private TransactionRecord buildTransaction(){
+    @PostConstruct
+    public void ExecuteCustomerTransactionFraudEvaluationV2(){
+        log.info("------------------------------ Starting RND for Transaction Fraud Evaluation v1-------------------------");
+        var customer = buildV2Customer();
+        var transaction = buildV2Transaction();
+
+        fraudEvaluationEngine.configureContext(transaction, customer);
+        fraudEvaluationEngine.build(ExpressionDefaults.FLAG_TRANSACTION_DEFAULT_v2, true);
+        var isTransactionFraudulent = fraudEvaluationEngine.isTransactionSuspicious(transaction, customer);
+
+        log.info("Transaction considered suspicious or fraudulent : {}", isTransactionFraudulent);
+        log.info("Expression Used : {}", ExpressionDefaults.FLAG_TRANSACTION_DEFAULT_v2);
+
+        log.info("--------------------------------- Completed the Fraud Evaluation Review ------------------------------------- \n \n");
+    }
+
+
+    private TransactionRecord buildV1Transaction(){
        return TransactionRecord.builder()
                 .transactionId(UUID.randomUUID().toString())
                 .transactionType("WEB")
@@ -54,6 +84,40 @@ public class Bootstrap {
                 .amount(3000L)
                 .currency("NGN")
                 .merchantId("Filling-Station")
+                .build();
+
+    }
+
+    private TransactionRecord buildV2Transaction(){
+        return TransactionRecord.builder()
+                .transactionId(UUID.randomUUID().toString())
+                .transactionType("POS")
+                .timestamp(LocalDateTime.now().minusDays(1))
+                .amount(200000L)
+                .currency("NGN")
+                .merchantId("Filling-Station")
+                .build();
+
+    }
+
+    private Customer buildV1Customer(){
+        return Customer.builder()
+                .firstName("Chris")
+                .lastName("Odegard")
+                .MembershipType(MembershipType.GOLD)
+                .kycLevel(KycLevel.Level1)
+                .createdAt(LocalDateTime.now().minusDays(10))
+                .build();
+
+    }
+
+    private Customer buildV2Customer(){
+        return Customer.builder()
+                .firstName("Eze")
+                .lastName("Eberechi")
+                .MembershipType(MembershipType.GOLD)
+                .kycLevel(KycLevel.Level2)
+                .createdAt(LocalDateTime.now().minusDays(6))
                 .build();
 
     }

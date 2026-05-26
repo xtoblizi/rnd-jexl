@@ -16,7 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class Today {
 
-    private final Map<LocalDate, String> holidays;
+    private final Map<LocalDate, String> holidays; // bean holiday as configure in the RndConfigs.
     private LocalDateTime now = LocalDateTime.now();
 
     public boolean isPublicHoliday(){

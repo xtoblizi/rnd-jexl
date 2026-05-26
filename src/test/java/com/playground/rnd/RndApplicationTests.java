@@ -1,6 +1,6 @@
 package com.playground.rnd;
 
-import com.playground.rnd.discount.DiscountComputationEngine;
+import com.playground.rnd.rulesEngine.DiscountComputationEngine;
 import com.playground.rnd.utils.Today;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.playground.rnd.discount;
+package com.playground.rnd.rulesEngine;
 
 import com.playground.rnd.models.TransactionRecord;
 import org.junit.jupiter.api.Test;
