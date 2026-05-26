@@ -19,5 +19,5 @@ public class ExpressionDefaults {
     public static final String FLAG_TRANSACTION_DEFAULT_v2 = "transactionRecord.amount >= config.flagAmount " +
             "&& (customer.createdAt.plusDays(config.flagPeriodInDays).isAfter(now)) " +
             "&& (customer.kycLevel == 'Level1' || customer.kycLevel == 'Level2') " +
-            "&& (!today.isWeekend())";
+            "&& (today.isWeekend())";
 }
